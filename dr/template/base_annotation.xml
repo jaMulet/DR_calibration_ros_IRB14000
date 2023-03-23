@@ -1,5 +1,5 @@
 <annotation>
-	<folder>dataset_genannotations</folder>
+	<folder>annotation</folder>
 	<source>yumi_dr</source>
 	<size>
 		<depth>3</depth>

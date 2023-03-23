@@ -6,7 +6,7 @@
     <arg name="PATIENCE" default="20" />
     <arg name="THREADS" default="1" />
     <arg name="training_name" default="DR_calib_yumi" />
-    <arg name="retraining_file_name" default="None" /> <!-- only for retraining -->
+    <arg name="weight_file_name" default="None" /> <!-- only for retraining -->
     <arg name="initial_learning_rate" default="0.00001" />
     <arg name="min_learning_rate" default="0.00000001" />
        
@@ -14,5 +14,5 @@
 
   <node pkg="my_dnn_training_pkg" type="train_model.py" name="train_model_node"
         output="screen"
-        args="$(arg EPOCHS) $(arg BATCH_SIZE) $(arg PATIENCE) $(arg THREADS) $(arg training_name) $(arg retraining_file_name) $(arg initial_learning_rate) $(arg min_learning_rate) $(arg path_to_database_training_package)"/>
+        args="$(arg EPOCHS) $(arg BATCH_SIZE) $(arg PATIENCE) $(arg THREADS) $(arg training_name) $(arg weight_file_name) $(arg initial_learning_rate) $(arg min_learning_rate) $(arg path_to_database_training_package)"/>
 </launch>

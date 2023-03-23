@@ -50,15 +50,15 @@ def generate_database(phase, path_to_source_training_package, path_to_database_t
     validation_csv_output_file = os.path.join(csv_folder_path, "validation.csv")
 
     if not os.path.exists(dataset_folder):
-        rospy.logfatal("Dataset not found==>"+str(dataset_folder)+", please launch 'roslaunch yumi_dr yumi_dr_environment.launch' + 'roslaunch yumi_dr yumi_dr.launch'")
+        rospy.logfatal("Dataset not found: '"+str(dataset_folder)+"'. please launch 'roslaunch dr_launch yumi_dr_pretraining.launch' and/or 'roslaunch dr_launch yumi_dr_training_off.launch'")
         return False
     else:
-        rospy.loginfo("Training/Pretraining material path found ==>"+str(dataset_folder))
+        rospy.loginfo("Training/Pretraining material path found: " + str(dataset_folder))
 
     if os.path.exists(csv_folder_path):
         shutil.rmtree(csv_folder_path)
     os.makedirs(csv_folder_path)
-    rospy.loginfo("Created folder=" + str(csv_folder_path))
+    rospy.loginfo("Created folder: " + str(csv_folder_path))
 
     rospy.loginfo("END of Directories Setup")
     # END OF Directories Setup
@@ -78,9 +78,9 @@ def generate_database(phase, path_to_source_training_package, path_to_database_t
 
         path = os.path.join(dataset_folder)
 
-        rospy.logdebug("path from XML==>"+str(path))
+        rospy.logdebug("path from XML: "+str(path))
 
-        if (tree.findtext("/robot/joints_pos/q1") == "error"):
+        if (tree.findtext("./robot/joints_pos/q1") == "error"):
             pass
         
         else:
@@ -150,7 +150,7 @@ def generate_database(phase, path_to_source_training_package, path_to_database_t
     lengths = []
     i = 0
     last = 0
-    rospy.loginfo("Getting Object elements...")
+    rospy.loginfo("Getting Object elements")
     for j, row in enumerate(output):
         if last == row[-1]:
             i += 1
@@ -161,7 +161,7 @@ def generate_database(phase, path_to_source_training_package, path_to_database_t
             last += 1
 
     lengths.append(i)
-    rospy.loginfo("Object elements==>"+str(lengths))
+    rospy.loginfo("Object elements: "+str(lengths))
 
 
     ## START CSV generation
@@ -183,22 +183,14 @@ def generate_database(phase, path_to_source_training_package, path_to_database_t
                 elif phase=="training":
 
                     q1, q2, q3, q4, q5, q6, q7, x_com, y_com, z_com, quat_x, quat_y, quat_z, quat_w, class_name, class_id = output[s]
-                    data_list = [q1, q2, q3, q4, q5, q6, q7, x_com, y_com, z_com, quat_x, quat_y, quat_z, quat_w, class_name, class_names[class_name]]
+                    data_list = [q1, q2, q3, q4, q5, q6, q7, -1, -1, -1, -1, -1, -1, -1, x_com, y_com, z_com, quat_x, quat_y, quat_z, quat_w, class_name, class_names[class_name]]
 
-                # We decide if it goes to train folder or to validate folder
+                # Decide if it goes to train folder or to validate folder
 
                 if i <= c * SPLIT_RATIO:
-                #    basename = os.path.basename(data_list[0])
-                #    train_path = os.path.join(train_folder, basename)
-                #    data_list[0] = os.path.abspath(train_path)
                     csv_train_writer.writerow(data_list)
                 else:
-                #    basename = os.path.basename(data_list[0])
-                #    validate_path = os.path.join(validation_folder, basename)
-                #    data_list[0] = os.path.abspath(validate_path)
                     csv_validate_writer.writerow(data_list)
-
-                #cv2.imwrite(data_list[0])
 
                 s += 1
 

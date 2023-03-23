@@ -7,13 +7,13 @@
     <arg name="hw_interface" default="PositionJointInterface"/>
     <!-- *************************************************** -->
     <!-- DR parameters -->
-    <arg name="joint_1R" default="0.0031223886246944826"/>
-    <arg name="joint_2R" default="0.010968333016596055"/>
-    <arg name="joint_7R" default="-0.0056519523375061411"/>
-    <arg name="joint_3R" default="-0.002549884272342322"/>
-    <arg name="joint_4R" default="-0.0059705393005815045"/>
-    <arg name="joint_5R" default="0.010816570271012498"/>
-    <arg name="joint_6R" default="-0.013539274011293149"/>
+    <arg name="joint_1R" default="-0.00028663860945365272"/>
+    <arg name="joint_2R" default="0.006999632932935612"/>
+    <arg name="joint_7R" default="-0.0031460982684862245"/>
+    <arg name="joint_3R" default="-0.0013999915743025957"/>
+    <arg name="joint_4R" default="-0.0042775032520205288"/>
+    <arg name="joint_5R" default="-0.00092790334648443229"/>
+    <arg name="joint_6R" default="-0.00073112796077402342"/>
     <param name="robot_randomised_description" command="xacro $(find dr_description)/urdf/yumi_main.xacro 
             gazebo:=$(arg gazebo) 
             table:=$(arg table)

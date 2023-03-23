@@ -42,8 +42,9 @@ class DataSequence(Sequence):
 
         with open(csv_file, "r") as file:
             """
-            Which element do we have interest in?
-            [q1, q2, q3, q4, q5, q6, q7, ideal_x_com, ideal_y_com, ideal_z_com, ideal_quat_x, ideal_quat_y, ideal_quat_z, ideal_quat_w random_x_com, random_y_com, random_z_com, random_quat_x, random_quat_y, random_quat_z, random_quat_w]
+            Elements of interest?
+            Pretraining phase -> [q1, q2, q3, q4, q5, q6, q7, ideal_x_com, ideal_y_com, ideal_z_com, ideal_quat_x, ideal_quat_y, ideal_quat_z, ideal_quat_w random_x_com, random_y_com, random_z_com, random_quat_x, random_quat_y, random_quat_z, random_quat_w]
+            Training phase -> [q1, q2, q3, q4, q5, q6, q7, _, _, _, _, _, _, _, x_com, y_com, z_com, quat_x, quat_y, quat_z, quat_w]
             We only want the DNN to learn to give us the Q vector from the XYZ 3D position of the robot EE.
             q1
             q2
@@ -62,7 +63,7 @@ class DataSequence(Sequence):
             file.seek(0)
 
             reader = csv.reader(file, delimiter=",")
-            for index, (q1, q2, q3, q4, q5, q6, q7, _, _, _, _, _, _, _, rand_x_com, rand_y_com, rand_z_com, rand_qx_com, rand_qy_com, rand_qz_com, rand_qw_com, _, _) in enumerate(reader):
+            for index, (q1, q2, q3, q4, q5, q6, q7, _, _, _, _, _, _, _, x_com, y_com, z_com, qx_com, qy_com, qz_com, qw_com, _, _) in enumerate(reader):
                 """
                 number_of_elements_to_be_input == 7:
                     self.x[index][0] = rand_x_com
@@ -81,13 +82,13 @@ class DataSequence(Sequence):
                     self.y[index][5] = q6
                     self.y[index][6] = q7
                 """
-                self.x[index][0] = rand_x_com
-                self.x[index][1] = rand_y_com
-                self.x[index][2] = rand_z_com
-                self.x[index][3] = rand_qx_com
-                self.x[index][4] = rand_qy_com
-                self.x[index][5] = rand_qz_com
-                self.x[index][6] = rand_qw_com
+                self.x[index][0] = x_com
+                self.x[index][1] = y_com
+                self.x[index][2] = z_com
+                self.x[index][3] = qx_com
+                self.x[index][4] = qy_com
+                self.x[index][5] = qz_com
+                self.x[index][6] = qw_com
 
                 self.y[index][0] = q1
                 self.y[index][1] = q2
@@ -214,7 +215,6 @@ def train(model, epochs, batch_size, patience, threads, train_csv, validation_cs
 
 def main():
 
-
     rospy.init_node('generate_database_node', anonymous=True, log_level=rospy.WARN)
     rospy.logwarn("STARTING training process")
     
@@ -236,18 +236,17 @@ def main():
         rospy.logwarn("PATIENCE to training:"+str(PATIENCE))
         rospy.logwarn("THREADS to training:"+str(THREADS))
         rospy.logwarn("training_name to training:"+str(training_name))
-        rospy.logwarn("weight_file_name to training:"+str(weight_file_name))
+        rospy.logwarn("weight_file_name to retraining:"+str(weight_file_name))
         rospy.logwarn("initial_learning_rate to training:"+str(initial_learning_rate))
         rospy.logwarn("min_learning_rate to training:"+str(min_learning_rate))
         rospy.logwarn("path_to_database_training_package to training:"+str(path_to_database_training_package))
-        
         
         rospy.logwarn("Retrieving Paths...")
     
         if path_to_database_training_package == "None":
             rospack = rospkg.RosPack()
             # get the file path for dcnn_training_pkg
-            path_to_database_training_package = rospack.get_path('my_dnn_training_pkg')
+            path_to_database_training_package = rospack.get_path('dr_dnn_training')
             rospy.logwarn("Training Databse Path NOT found, setting default:"+str(path_to_database_training_package))
         else:
             rospy.logwarn("Training Databse FOUND, setting default:"+str(path_to_database_training_package))
@@ -263,12 +262,12 @@ def main():
         if os.path.exists(models_weight_checkpoints_folder):
             shutil.rmtree(models_weight_checkpoints_folder)
         os.makedirs(models_weight_checkpoints_folder)
-        print("Created folder=" + str(models_weight_checkpoints_folder))
+        print("Created folder: " + str(models_weight_checkpoints_folder))
     
         if os.path.exists(logs_folder):
             shutil.rmtree(logs_folder)
         os.makedirs(logs_folder)
-        print("Created folder=" + str(logs_folder))
+        print("Created folder: " + str(logs_folder))
     
         print ("Start Create Model")
         modelGRU = create_model()      
@@ -279,7 +278,7 @@ def main():
         if weight_file_name != "None":
             rospack = rospkg.RosPack()
             # get the file path for rospy_tutorials
-            path_to_package = rospack.get_path('my_dcnn_training_pkg')
+            path_to_package = rospack.get_path('dr_dnn_training')
             backup_models_weight_checkpoints_folder = os.path.join(path_to_package, "bk")
             load_weight_starting_file = os.path.join(backup_models_weight_checkpoints_folder, weight_file_name)
         else:
