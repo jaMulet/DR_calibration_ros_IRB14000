@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+  
+    <arg name="path_to_source_training_material" default="/home/jama/catkin_yumi_ws/src" />
+    <arg name="path_to_output_training_material" default="None" />
+    <arg name="phase" default="pretraining" />
+    <arg name="file_date" default="2022_08_12_22_33" />
+
+  
+  <node pkg="dr_dnn_training" type="generate_dataset.py" name="generate_database_node"
+        output="screen"
+        args="$(arg path_to_source_training_material) $(arg path_to_output_training_material) $(arg phase)"/>
+</launch>

@@ -1,0 +1,127 @@
+# Publish all joint states ----------------------------------- INCLUDED IN THE OTHER .YAML FILE
+joint_state_controller:
+  type: joint_state_controller/JointStateController
+  publish_rate: 250
+
+egm_state_controller:
+  type: abb_egm_state_controller/EGMStateController
+  publish_rate: 250
+
+
+# Joint Position Trajectory Controllers ----------------------------------------
+joint_position_trajectory_controller:
+  type: position_controllers/JointTrajectoryController
+  joints:
+    - yumi_robl_joint_1
+    - yumi_robl_joint_2
+    - yumi_robl_joint_7
+    - yumi_robl_joint_3
+    - yumi_robl_joint_4
+    - yumi_robl_joint_5
+    - yumi_robl_joint_6
+    - yumi_robr_joint_1
+    - yumi_robr_joint_2
+    - yumi_robr_joint_7
+    - yumi_robr_joint_3
+    - yumi_robr_joint_4
+    - yumi_robr_joint_5
+    - yumi_robr_joint_6
+
+#/yumi/egm/joint_position_trajectory_controller_l:
+joint_position_trajectory_controller_l:
+  type: position_controllers/JointTrajectoryController
+  joints:
+    - yumi_robl_joint_1
+    - yumi_robl_joint_2
+    - yumi_robl_joint_7
+    - yumi_robl_joint_3
+    - yumi_robl_joint_4
+    - yumi_robl_joint_5
+    - yumi_robl_joint_6
+  gains:
+    yumi_robl_joint_1: {p: 1.5,  d: 0, i: 0.002, i_clamp: 0.1}
+    yumi_robl_joint_2: {p: 1.5,  d: 0, i: 0.002, i_clamp: 0.1}
+    yumi_robl_joint_7: {p: 1.5,  d: 0, i: 0.002, i_clamp: 0.1}
+    yumi_robl_joint_3: {p: 1.5,  d: 0, i: 0.002, i_clamp: 0.1}
+    yumi_robl_joint_4: {p: 1.5,  d: 0, i: 0.002, i_clamp: 0.1}
+    yumi_robl_joint_5: {p: 1.5,  d: 0, i: 0.002, i_clamp: 0.1}
+    yumi_robl_joint_6: {p: 1.5,  d: 0, i: 0.002, i_clamp: 0.1}
+
+#/yumi/egm/joint_position_trajectory_controller_r:
+joint_position_trajectory_controller_r:
+  type: position_controllers/JointTrajectoryController
+  joints:
+    - yumi_robr_joint_1
+    - yumi_robr_joint_2
+    - yumi_robr_joint_7
+    - yumi_robr_joint_3
+    - yumi_robr_joint_4
+    - yumi_robr_joint_5
+    - yumi_robr_joint_6
+  gains:
+    yumi_robr_joint_1: {p: 1.5,  d: 0, i: 0.002, i_clamp: 0.1}
+    yumi_robr_joint_2: {p: 1.5,  d: 0, i: 0.002, i_clamp: 0.1}
+    yumi_robr_joint_7: {p: 1.5,  d: 0, i: 0.002, i_clamp: 0.1}
+    yumi_robr_joint_3: {p: 1.5,  d: 0, i: 0.002, i_clamp: 0.1}
+    yumi_robr_joint_4: {p: 1.5,  d: 0, i: 0.002, i_clamp: 0.1}
+    yumi_robr_joint_5: {p: 1.5,  d: 0, i: 0.002, i_clamp: 0.1}
+    yumi_robr_joint_6: {p: 1.5,  d: 0, i: 0.002, i_clamp: 0.1}
+
+
+# Joint Velocity Trajectory Controllers ----------------------------------------
+joint_velocity_trajectory_controller:
+  type: velocity_controllers/JointTrajectoryController
+  joints:
+    - yumi_robl_joint_1
+    - yumi_robl_joint_2
+    - yumi_robl_joint_7
+    - yumi_robl_joint_3
+    - yumi_robl_joint_4
+    - yumi_robl_joint_5
+    - yumi_robl_joint_6
+    - yumi_robr_joint_1
+    - yumi_robr_joint_2
+    - yumi_robr_joint_7
+    - yumi_robr_joint_3
+    - yumi_robr_joint_4
+    - yumi_robr_joint_5
+    - yumi_robr_joint_6
+  
+
+joint_velocity_trajectory_controller_l:
+  type: velocity_controllers/JointTrajectoryController
+  joints:
+    - yumi_robl_joint_1
+    - yumi_robl_joint_2
+    - yumi_robl_joint_7
+    - yumi_robl_joint_3
+    - yumi_robl_joint_4
+    - yumi_robl_joint_5
+    - yumi_robl_joint_6
+  gains:
+    yumi_robl_joint_1: {p: 1.5,  d: 0, i: 0.002, i_clamp: 0.1}
+    yumi_robl_joint_2: {p: 1.5,  d: 0, i: 0.002, i_clamp: 0.1}
+    yumi_robl_joint_7: {p: 1.5,  d: 0, i: 0.002, i_clamp: 0.1}
+    yumi_robl_joint_3: {p: 1.5,  d: 0, i: 0.002, i_clamp: 0.1}
+    yumi_robl_joint_4: {p: 1.5,  d: 0, i: 0.002, i_clamp: 0.1}
+    yumi_robl_joint_5: {p: 1.5,  d: 0, i: 0.002, i_clamp: 0.1}
+    yumi_robl_joint_6: {p: 1.5,  d: 0, i: 0.002, i_clamp: 0.1}
+
+joint_velocity_trajectory_controller_r:
+  type: velocity_controllers/JointTrajectoryController
+  joints:
+    - yumi_robr_joint_1
+    - yumi_robr_joint_2
+    - yumi_robr_joint_7
+    - yumi_robr_joint_3
+    - yumi_robr_joint_4
+    - yumi_robr_joint_5
+    - yumi_robr_joint_6
+  gains:
+    yumi_robr_joint_1: {p: 1.5,  d: 0, i: 0.002, i_clamp: 0.1}
+    yumi_robr_joint_2: {p: 1.5,  d: 0, i: 0.002, i_clamp: 0.1}
+    yumi_robr_joint_7: {p: 1.5,  d: 0, i: 0.002, i_clamp: 0.1}
+    yumi_robr_joint_3: {p: 1.5,  d: 0, i: 0.002, i_clamp: 0.1}
+    yumi_robr_joint_4: {p: 1.5,  d: 0, i: 0.002, i_clamp: 0.1}
+    yumi_robr_joint_5: {p: 1.5,  d: 0, i: 0.002, i_clamp: 0.1}
+    yumi_robr_joint_6: {p: 1.5,  d: 0, i: 0.002, i_clamp: 0.1}

@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<launch>
+
+  <arg name="gazebo" default="false" />
+  <arg name="table" default="false" />
+  <arg name="smart_gripper" default="false" />
+  <arg name="camera" default="false" />
+
+  <param name="/yumi/robot_description" command="xacro $(find yumi_description)/urdf/yumi_main.xacro 
+	 gazebo:=$(arg gazebo) 
+	 table:=$(arg table)
+	 camera:=$(arg camera)
+	 smart_gripper:=$(arg smart_gripper)"/>
+	
+</launch>

@@ -1,0 +1,165 @@
+<?xml version="1.0"?>
+<robot name="yumi" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="yumi_transmission" params="name hardware_interface">
+
+    <transmission name="${name}_robr_tran_1">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${name}_robr_joint_1">
+	<hardwareInterface>${hardware_interface}</hardwareInterface>
+      </joint>
+      <actuator name="${name}_robr_motor_1">
+	<hardwareInterface>${hardware_interface}</hardwareInterface>
+	<mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+
+    <transmission name="${name}_robr_tran_2">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${name}_robr_joint_2">
+	<hardwareInterface>${hardware_interface}</hardwareInterface>
+      </joint>
+      <actuator name="${name}_robr_motor_2">
+	<hardwareInterface>${hardware_interface}</hardwareInterface>
+	<mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+
+    <transmission name="${name}_robr_tran_7">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${name}_robr_joint_7">
+	<hardwareInterface>${hardware_interface}</hardwareInterface>
+      </joint>
+      <actuator name="${name}_robr_motor_7">
+	<hardwareInterface>${hardware_interface}</hardwareInterface>
+	<mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+
+    <transmission name="${name}_robr_tran_3">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${name}_robr_joint_3">
+	<hardwareInterface>${hardware_interface}</hardwareInterface>
+      </joint>
+      <actuator name="${name}_robr_motor_3">
+	<hardwareInterface>${hardware_interface}</hardwareInterface>
+	<mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+
+    <transmission name="${name}_robr_tran_4">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${name}_robr_joint_4">
+	<hardwareInterface>${hardware_interface}</hardwareInterface>
+      </joint>
+      <actuator name="${name}_robr_motor_4">
+	<hardwareInterface>${hardware_interface}</hardwareInterface>
+	<mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+
+    <transmission name="${name}_robr_tran_5">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${name}_robr_joint_5">
+	<hardwareInterface>${hardware_interface}</hardwareInterface>
+      </joint>
+      <actuator name="${name}_robr_motor_5">
+	<hardwareInterface>${hardware_interface}</hardwareInterface>
+	<mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+
+    <transmission name="${name}_robr_tran_6">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${name}_robr_joint_6">
+	<hardwareInterface>${hardware_interface}</hardwareInterface>
+      </joint>
+      <actuator name="${name}_robr_motor_6">
+	<hardwareInterface>${hardware_interface}</hardwareInterface>
+	<mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+
+    <transmission name="${name}_robl_tran_1">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${name}_robl_joint_1">
+	<hardwareInterface>${hardware_interface}</hardwareInterface>
+      </joint>
+      <actuator name="${name}_robl_motor_1">
+	<hardwareInterface>${hardware_interface}</hardwareInterface>
+	<mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+
+    <transmission name="${name}_robl_tran_2">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${name}_robl_joint_2">
+	<hardwareInterface>${hardware_interface}</hardwareInterface>
+      </joint>
+      <actuator name="${name}_robl_motor_2">
+	<hardwareInterface>${hardware_interface}</hardwareInterface>
+	<mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+
+    <transmission name="${name}_robl_tran_7">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${name}_robl_joint_7">
+	<hardwareInterface>${hardware_interface}</hardwareInterface>
+      </joint>
+      <actuator name="${name}_robl_motor_7">
+	<hardwareInterface>${hardware_interface}</hardwareInterface>
+	<mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+
+    <transmission name="${name}_robl_tran_3">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${name}_robl_joint_3">
+	<hardwareInterface>${hardware_interface}</hardwareInterface>
+      </joint>
+      <actuator name="${name}_robl_motor_3">
+	<hardwareInterface>${hardware_interface}</hardwareInterface>
+	<mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+
+    <transmission name="${name}_robl_tran_4">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${name}_robl_joint_4">
+	<hardwareInterface>${hardware_interface}</hardwareInterface>
+      </joint>
+      <actuator name="${name}_robl_motor_4">
+	<hardwareInterface>${hardware_interface}</hardwareInterface>
+	<mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+
+    <transmission name="${name}_robl_tran_5">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${name}_robl_joint_5">
+	<hardwareInterface>${hardware_interface}</hardwareInterface>
+      </joint>
+      <actuator name="${name}_robl_motor_5">
+	<hardwareInterface>${hardware_interface}</hardwareInterface>
+	<mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+
+    <transmission name="${name}_robl_tran_6">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${name}_robl_joint_6">
+	<hardwareInterface>${hardware_interface}</hardwareInterface>
+      </joint>
+      <actuator name="${name}_robl_motor_6">
+	<hardwareInterface>${hardware_interface}</hardwareInterface>
+	<mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+
+  </xacro:macro>
+
+</robot>
+
+
+

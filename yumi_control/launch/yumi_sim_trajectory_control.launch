@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<launch>
+
+  <arg name="robot_nickname" default="yumi"/>
+  <arg name="control_type" default="position"/>
+
+  <!-- Remap to match up with hardware interface's topics -->
+  <remap from="/joint_states" to="/egm/joint_states"/>
+
+  <!--<group ns="$(arg robot_nickname)">-->
+  <!-- ============================================================================================================= -->
+  <!-- ============================================================================================================= -->
+  <!-- 'ros_control' components in the "egm" namespace (to match the hardware interface) -->
+  <group ns="egm">
+    
+    <!-- load joint state controller -->
+    <rosparam file="$(find yumi_control)/config/joint_state_controller.yaml" command="load" />
+    <node name="joint_state_controller_spawner" pkg="controller_manager" type="controller_manager" args="spawn joint_state_controller" respawn="false" output="screen" />
+
+    <!-- load arm controllers -->
+    <rosparam file="$(find yumi_control)/config/traj_controllers.yaml" command="load" />
+
+    
+    <node if="$(eval arg('control_type') == 'position')" name="controller_spawner" pkg="controller_manager" type="controller_manager"
+                                                        args="spawn joint_position_trajectory_controller_l joint_position_trajectory_controller_r" respawn="false" output="screen"/>
+    <node if="$(eval arg('control_type') == 'velocity')" name="controller_spawner" pkg="controller_manager" type="controller_manager"
+                                                        args="spawn joint_velocity_trajectory_controller_l joint_velocity_trajectory_controller_r" respawn="false" output="screen"/>
+    
+  </group><!-- Ends EGM group -->
+  <!-- ============================================================================================================= -->
+  <!-- ============================================================================================================= -->
+
+  <!-- *************************************************** -->
+  <!-- Nodes to publish joint states and robot states      -->
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"/>
+
+  <!-- *************************************************** -->
+  <!-- Given the published joint states, publish tf for the robot links -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="true"/>
+  
+  <!--</group>-->
+
+  <!-- *************************************************** -->
+  <!-- Main MoveIt! executable with trajectory execution   -->
+
+  <include file="$(find yumi_moveit_config)/launch/move_group.launch">
+    <arg name="allow_trajectory_execution" value="true"/>
+    <arg name="fake_execution" value="false"/>
+    <arg name="info" value="true"/>
+    <arg name="debug" value="false"/>
+    <arg name="load_robot_description" value="true"/>
+  </include>
+
+</launch>

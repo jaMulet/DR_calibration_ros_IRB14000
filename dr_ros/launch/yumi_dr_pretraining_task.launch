@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<launch>
+
+  <!-- Robot namespace -->
+  <arg name="control_type" default="position"/>
+  <arg name="ideal_robot_model" default="/robot_description"/>
+  <arg name="random_robot_model" default="/robot_randomised_description"/>
+  <arg name="endeffector" default="yumi_tool0_R"/>
+
+  <!-- *************************************************** -->
+  <!-- URDF (randomised) robot description + SRDF loaded on the parameter server (from .xacro file) -->
+  <include file="$(find dr_description)/launch/yumi_dr_load_model.launch" >
+    <arg name="gazebo" value="true"/>
+    <arg name="smart_gripper" value="true"/>
+    <arg name="hw_interface" value="PositionJointInterface"/>
+  </include>
+
+  <!-- spawn randomised robot in Gazebo -->
+  <node name="spawn_gazebo_model" pkg="gazebo_ros" type="spawn_model"
+        args="-urdf -param robot_randomised_description
+              -model yumi
+              -J yumi_robl_joint_1 0
+              -J yumi_robl_joint_2 0
+              -J yumi_robl_joint_7 0
+              -J yumi_robl_joint_3 0
+              -J yumi_robl_joint_4 0
+              -J yumi_robl_joint_5 0
+              -J yumi_robl_joint_6 0
+              -J yumi_robr_joint_1 0
+              -J yumi_robr_joint_2 0
+              -J yumi_robr_joint_7 0
+              -J yumi_robr_joint_3 0
+              -J yumi_robr_joint_4 0
+              -J yumi_robr_joint_5 0
+              -J yumi_robr_joint_6 0
+              -unpause"
+        respawn="false" output="screen"/>
+
+  <!-- Load configurations for 'ros_control' controllers on the parameter server -->
+  <include file="$(find yumi_control)/launch/yumi_sim_trajectory_control.launch">
+    <arg name="control_type" value="$(arg control_type)"/>
+  </include>
+
+  <!-- Remap to match up with hardware interface's namepsace -->
+  <remap from="/joint_states" to="/egm/joint_states"/>
+
+  <node name="dr_pretraining_task" pkg="dr_ros" type="dr_pretraining_task" output="screen"
+        args="$(arg ideal_robot_model) $(arg random_robot_model) $(arg endeffector)"/>
+
+</launch>

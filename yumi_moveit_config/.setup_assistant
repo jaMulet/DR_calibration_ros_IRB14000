@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: yumi_description
+    relative_path: urdf/yumi.urdf
+    xacro_args: gazebo:= true smart_gripper:=true
+  SRDF:
+    relative_path: config/yumi.srdf
+  CONFIG:
+    author_name: Jose A Mulet
+    author_email: jose.alberola@stiima.cnr.it
+    generated_timestamp: 1645373600

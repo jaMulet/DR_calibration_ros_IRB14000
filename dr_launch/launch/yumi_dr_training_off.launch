@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+
+  <arg name="number_of_elements" default="500"/>
+  <arg name="path_to_dataset_gen" default="/home/jama/catkin_yumi_ws/src/"/>
+  <arg name="vision_sys_topic" default="/aruco_3dgrid/transform_grid"/>
+
+  <!-- Robot namespace -->
+  <arg name="robot_nickname" default="yumi" doc="The robot name. Ensure this is the same name you give to the arm in the urdf instance."/>
+
+  <!-- ************************************************************* -->
+  <!-- URDF + SRDF loaded on the parameter server (from .xacro file) -->
+  <include file="$(find yumi_description)/launch/yumi_load_model.launch" >
+    <arg name="gazebo" value="true"/>
+    <arg name="smart_gripper" value="true"/>
+    <arg name="arm_hw_interface" value="PositionJointInterface"/>
+    <arg name="gripper_hw_interface" value="EffortJointInterface"/>
+  </include>
+
+  <!-- ============================================================================================================= -->
+  <!-- ============================================================================================================= -->
+  <!--<group ns="$(arg robot_nickname)">-->
+
+    <!-- *********************************************** -->
+    <!-- DR orchestration: creation of real-data dataset -->
+    <node name="create_training_material_node" pkg="dr_ros" type="dr_training_dataset_gen.py" output="screen"
+          args="$(arg number_of_elements)"/>
+
+    <!-- *********************************************** -->
+    <!-- Gather EE position                              -->
+    <remap from="/vision_pose" to="$(arg vision_sys_topic)"/>
+    <node name="get_pose" pkg="dr_ros" type="get_pose_training" output="screen"
+          args="$(arg path_to_dataset_gen)"/>
+
+    <!-- *********************************************** -->
+    <!-- EGM contol                                      -->
+    <node name="egm_control" pkg="dr_ros" type="egm_control" output="screen"/>
+
+    <!-- *********************************************** -->
+    <!-- Remap services according to DR task namespace   -->
+
+  <!--</group>--><!-- Ends robot_nickname group-->
+  <!-- ============================================================================================================= -->
+  <!-- ============================================================================================================= -->
+
+</launch>

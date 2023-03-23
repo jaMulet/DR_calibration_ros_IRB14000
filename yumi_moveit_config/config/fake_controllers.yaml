@@ -1,0 +1,53 @@
+controller_list:
+  - name: fake_rob_l_controller
+    type: $(arg fake_execution_type)
+    joints:
+      - yumi_robl_joint_1
+      - yumi_robl_joint_2
+      - yumi_robl_joint_7
+      - yumi_robl_joint_3
+      - yumi_robl_joint_4
+      - yumi_robl_joint_5
+      - yumi_robl_joint_6
+  - name: fake_rob_r_controller
+    type: $(arg fake_execution_type)
+    joints:
+      - yumi_robr_joint_1
+      - yumi_robr_joint_2
+      - yumi_robr_joint_7
+      - yumi_robr_joint_3
+      - yumi_robr_joint_4
+      - yumi_robr_joint_5
+      - yumi_robr_joint_6
+  - name: fake_both_arms_controller
+    type: $(arg fake_execution_type)
+    joints:
+      - yumi_robl_joint_1
+      - yumi_robl_joint_2
+      - yumi_robl_joint_7
+      - yumi_robl_joint_3
+      - yumi_robl_joint_4
+      - yumi_robl_joint_5
+      - yumi_robl_joint_6
+      - yumi_robr_joint_1
+      - yumi_robr_joint_2
+      - yumi_robr_joint_7
+      - yumi_robr_joint_3
+      - yumi_robr_joint_4
+      - yumi_robr_joint_5
+      - yumi_robr_joint_6
+  - name: fake_left_gripper_controller
+    type: $(arg fake_execution_type)
+    joints:
+      []
+  - name: fake_right_gripper_controller
+    type: $(arg fake_execution_type)
+    joints:
+      []
+initial:  # Define initial robot poses.
+  - group: rob_l
+    pose: Home_left
+  - group: rob_r
+    pose: Home_right
+  - group: both_arms
+    pose: Home_both

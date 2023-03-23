@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<launch>
+
+  <arg name="robot_nickname" default="yumi" doc="The robot name. Ensure this is the same name you give to the arm in the urdf instance."/>
+  <arg name="robot_ip" default="192.168.1.108"/>
+  <arg name="control_type" default="position"/>
+  <arg name="robot_model" default="/robot_description"/>
+  <arg name="endeffector" default="yumi_tool0_R"/>
+
+  <!-- ************************************************************* -->
+  <include file="$(find yumi_control)/launch/yumi_real_trajectory_control.launch" >
+    <arg name="robot_nickname" value="$(arg robot_nickname)"/>
+    <arg name="robot_ip" value="$(arg robot_ip)"/>
+    <arg name="control_type" value="$(arg control_type)"/>
+</include>
+
+  <!-- Remap to match up with hardware interface's namepsace -->
+  <remap from="/joint_states" to="/egm/joint_states"/>
+
+  <!-- ************************************************************* -->
+  <node name="dr_training_task" pkg="dr_ros" type="dr_training_task" output="screen"
+        args="$(arg robot_model) $(arg endeffector)"/>
+
+</launch>

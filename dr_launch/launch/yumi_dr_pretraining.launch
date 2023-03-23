@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<launch>
+
+  <arg name="number_of_elements" default="500"/>
+  <arg name="path_to_dataset_gen" default="/home/jama/catkin_yumi_ws/src/"/>
+  
+  <!-- Robot namespace -->
+  <arg name="robot_nickname" default="yumi" doc="The robot name. Ensure this is the same name you give to the arm in the urdf instance."/>
+
+  <!-- ============================================================================================================= -->
+  <!-- startup simulated world -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="worlds/empty.world"/>
+    <arg name="gui" value="false"/> <!-- Make it true for Gazebo GUI -->
+    <arg name="paused" value="true"/>
+    <arg name="debug" value="false"/>
+  </include>
+
+  <!-- ************************************************************* -->
+  <!-- URDF + SRDF loaded on the parameter server (from .xacro file) -->
+  <include file="$(find yumi_description)/launch/yumi_load_model.launch" >
+    <arg name="gazebo" value="true"/>
+    <arg name="smart_gripper" value="true"/>
+    <arg name="arm_hw_interface" value="PositionJointInterface"/>
+    <arg name="gripper_hw_interface" value="EffortJointInterface"/>
+  </include>
+
+  <!-- ============================================================================================================= -->
+  <!-- ============================================================================================================= -->
+  <!--<group ns="$(arg robot_nickname)">-->
+
+    <!-- *********************************************** -->
+    <!-- DR orchestration: creation of synthetic dataset -->
+    <node name="create_training_material_node" pkg="dr_ros" type="dr_pretraining_dataset_gen.py" output="screen"
+          args="$(arg number_of_elements)"/>
+
+    <!-- *********************************************** -->
+    <!-- Creation of the randomised model                -->
+    <node name="randomiser" pkg="dr_ros" type="randomiser_URDF" output="screen"/>
+
+    <!-- *********************************************** -->
+    <!-- Gather EE position                              -->
+    <node name="get_pose" pkg="dr_ros" type="get_pose_pretraining" output="screen"
+          args="$(arg path_to_dataset_gen)"/>
+
+    <!-- *********************************************** -->
+    <!-- Remap services according to namespaces          -->
+    <remap from="/yumi/gazebo/delete_model" to="/gazebo/delete_model"/>
+    <remap from="/yumi/gazebo/pause_physics" to="/gazebo/pause_physics"/>
+    <remap from="/yumi/gazebo/reset_simulation" to="/gazebo/reset_simulation"/>
+        
+    <!-- *********************************************** -->
+    <!-- Gazebo simulation control (reset, clear, etc)   -->
+    <node name="sim_control" pkg="dr_ros" type="sim_control" output="screen"/>
+
+  <!--</group>-->
+  <!-- ============================================================================================================= -->
+  <!-- ============================================================================================================= -->
+
+</launch>

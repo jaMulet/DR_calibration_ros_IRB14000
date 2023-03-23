@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<robot name="yumi" xmlns:xacro="http://www.ros.org/wiki/xacro">
+		
+  <xacro:arg name="gazebo" default="false"/>
+  <xacro:arg name="table" default="false"/>
+  <xacro:arg name="camera" default="false"/>
+
+  <xacro:arg name="arms_hw_interface" default="VelocityJointInterface"/>
+
+  <xacro:arg name="smart_gripper" default="false"/>
+  <xacro:arg name="grippers_hw_interface" default="EffortJointInterface"/>
+
+  <xacro:property name="yumi_parent" value="world" />
+  
+  <!-- ============================================ -->
+  <!-- Import Rviz colors                           -->
+  <xacro:include filename="$(find yumi_description)/urdf/util/materials.xacro" />
+  
+  <!-- Import utilities                             -->
+  <xacro:include filename="$(find yumi_description)/urdf/util/utilities.xacro" />
+ 
+  <!-- ============================================ -->
+  <!--Import the yumi macro                         -->
+  <xacro:include filename="$(find yumi_description)/urdf/yumi.xacro"/>
+  
+  <link name="world"/>
+  <joint name="world_joint" type="fixed">
+    <parent link="world"/>
+    <child link="yumi_base_link"/>
+    <origin xyz="0 0 0.1" rpy="0 0 0" />
+  </joint>
+
+  <!-- yumi HW interface -->
+  <xacro:yumi name="yumi" hardware_interface="hardware_interface/$(arg arms_hw_interface)" parent="${yumi_parent}" >
+    <origin xyz="0 0 0.1" rpy="0 0 0" />
+  </xacro:yumi>
+
+  <!-- ============================================ -->  
+  <!--Import the yumi servo gripper macro           -->
+  <xacro:if value="$(arg smart_gripper)">
+    <xacro:include filename="$(find yumi_description)/urdf/grippers/yumi_servo_gripper.xacro"/>
+  
+    <!--right gripper -->
+    <xacro:yumi_servo_gripper name="gripper_r" hardware_interface="hardware_interface/$(arg grippers_hw_interface)" parent="yumi_robr_link_7">
+      <origin xyz="0 0 0.007" rpy="0 0 ${PI}" />
+    </xacro:yumi_servo_gripper>
+
+    <!--left gripper -->
+    <xacro:yumi_servo_gripper name="gripper_l" hardware_interface="hardware_interface/$(arg grippers_hw_interface)" parent="yumi_robl_link_7">
+      <origin xyz="0 0 0.007" rpy="0 0 ${PI}" />
+    </xacro:yumi_servo_gripper>
+  </xacro:if>
+
+  <!-- ============================================ -->
+  <!-- Import Gazebo plugins -->
+  <xacro:if value="$(arg gazebo)">
+    <xacro:include filename="$(find yumi_description)/urdf/gazebo/gazebo.urdf.xacro"/>
+  </xacro:if>
+
+
+
+
+
+
+
+</robot>

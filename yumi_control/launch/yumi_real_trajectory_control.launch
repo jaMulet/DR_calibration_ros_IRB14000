@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<launch> 
+
+  <arg name="robot_nickname" default=""/>
+  <arg name="robot_ip" default="0.0.0.0" doc="The LAN port controller's IP address"/>
+  <arg name="control_type" default="position"/>
+
+  <!-- Remap to match up with hardware interface's namepsace -->
+  <remap from="/joint_states" to="/egm/joint_states"/>
+
+  <!-- ============================================================================================================= -->
+  <!-- Robot Web Services (RWS) related components.                                                                  -->
+  <!-- ============================================================================================================= -->
+
+  <!-- RWS state publisher (i.e. general states about the robot controller) -->
+  <include file="$(find abb_rws_state_publisher)/launch/rws_state_publisher.launch">
+     <arg name="robot_ip" value="$(arg robot_ip)"/>
+     <arg name="robot_nickname" value="$(arg robot_nickname)"/>
+  </include>
+
+  <!-- RWS service provider (i.a. starting/stopping the robot controller's RAPID execution) -->
+  <include file="$(find abb_rws_service_provider)/launch/rws_service_provider.launch">
+     <arg name="robot_ip" value="$(arg robot_ip)"/>
+     <arg name="robot_nickname" value="$(arg robot_nickname)"/>
+  </include>
+
+  <!-- ============================================================================================================= -->
+  <!-- Externally Guided Motion (EGM) related components.                                                            -->
+  <!-- ============================================================================================================= -->
+
+  <!-- EGM hardware interface (i.e. 'ros_control'-based interface for interacting with mechanical units) -->
+  <include file="$(find abb_egm_hardware_interface)/launch/egm_hardware_interface.launch">
+    <arg name="base_config_file" value="$(find yumi_control)/config/abb_robot_driver_hardware_base.yaml"/>
+    <arg name="egm_config_file" value="$(find yumi_control)/config/abb_robot_driver_hardware_egm.yaml"/>
+  </include>
+
+  <!-- ============================================================================================================= -->
+  <!-- ============================================================================================================= -->
+  <!-- 'ros_control' components in the "egm" namespace (to match the hardware interface) -->
+  <group ns="egm">
+  
+    <!-- Load configurations for 'ros_control' controllers on the parameter server -->
+    <rosparam file="$(find yumi_control)/config/traj_controllers.yaml" command="load"/>
+
+    <!-- Two 'ros_control' controller spawners (stopped for the controller that command motions) -->
+    <node pkg="controller_manager" type="spawner" name="started" args="egm_state_controller joint_state_controller"/>
+    <node if="$(eval arg('control_type') == 'position')" pkg="controller_manager" type="spawner" name="stopped" 
+                                                         args="--stopped joint_position_trajectory_controller_l joint_position_trajectory_controller_r"/>
+    <node if="$(eval arg('control_type') == 'velocity')" pkg="controller_manager" type="spawner" name="stopped"
+                                                         args="--stopped joint_velocity_trajectory_controller joint_velocity_trajectory_controller_l joint_velocity_trajectory_controller_r"/>
+
+  </group><!-- Ends EGM group -->
+  <!-- ============================================================================================================= -->
+  <!-- ============================================================================================================= -->
+
+  <!-- *************************************************** -->
+  <!-- Main MoveIt! executable with trajectory execution   -->
+  <include file="$(find yumi_moveit_config)/launch/move_group.launch">
+    <arg name="allow_trajectory_execution" value="true"/>
+    <arg name="fake_execution" value="false"/>
+    <arg name="info" value="true"/>
+    <arg name="debug" value="false"/>
+    <arg name="load_robot_description" value="true"/>
+  </include>
+
+</launch>
+

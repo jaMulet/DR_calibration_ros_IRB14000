@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="gazebo" default="false"/>
+    <arg name="table" default="false"/>
+    <arg name="smart_gripper" default="false"/>
+    <arg name="camera" default="false"/>
+    <arg name="hw_interface" default="PositionJointInterface"/>
+    <!-- *************************************************** -->
+    <!-- DR parameters -->
+    <arg name="joint_1R" default="0.0031223886246944826"/>
+    <arg name="joint_2R" default="0.010968333016596055"/>
+    <arg name="joint_7R" default="-0.0056519523375061411"/>
+    <arg name="joint_3R" default="-0.002549884272342322"/>
+    <arg name="joint_4R" default="-0.0059705393005815045"/>
+    <arg name="joint_5R" default="0.010816570271012498"/>
+    <arg name="joint_6R" default="-0.013539274011293149"/>
+    <param name="robot_randomised_description" command="xacro $(find dr_description)/urdf/yumi_main.xacro 
+            gazebo:=$(arg gazebo) 
+            table:=$(arg table)
+            camera:=$(arg camera)
+            smart_gripper:=$(arg smart_gripper)
+            arms_hw_interface:=$(arg hw_interface)
+            DR_joint_1R:=$(arg joint_1R)
+            DR_joint_2R:=$(arg joint_2R)
+            DR_joint_7R:=$(arg joint_7R)
+            DR_joint_3R:=$(arg joint_3R)
+            DR_joint_4R:=$(arg joint_4R)
+            DR_joint_5R:=$(arg joint_5R)
+            DR_joint_6R:=$(arg joint_6R)"/>
+    <!-- The semantic description that corresponds to the URDF (randomised)-->
+    <param name="robot_randomised_description_semantic" textfile="$(find yumi_moveit_config)/config/yumi.srdf"/>
+    <!-- The kinematic description that corresponds to the URDF -->
+    <group ns="robot_randomised_description_kinematics">
+        <rosparam command="load" file="$(find yumi_moveit_config)/config/kinematics.yaml"/>
+    </group>
+</launch>

@@ -1,0 +1,9 @@
+<annotation>
+	<folder>dataset_genannotations</folder>
+	<source>yumi_dr</source>
+	<size>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	
+</annotation>
