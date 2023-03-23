@@ -7,7 +7,7 @@ This repository contains the files and ROS wrappers of the initial approach to t
 The approach is divided on two stages to automatically create the datasets:
 
 1. *Synthetic data generation*. Creates a dataset using the Gazebo simulator and the randomised model.
-2. *Real data generation*. Creates a dataset using the real robot. This phase controls the robot using the *Robot Web Services* (RWS) and *External Guided Motion* (EGM) interfaces of the [ABB robot driver][1] (refer to the specific repository for the installation instructions). The position and orientation of the robot is provided using the [3d grid board Aruco] library and a vision system.
+2. *Real data generation*. Creates a dataset using the real robot. This phase controls the robot using the *Robot Web Services* (RWS) and *External Guided Motion* (EGM) interfaces of the [ABB robot driver][1] (refer to the specific repository for the installation instructions). The position and orientation of the robot is provided using the [3d grid board Aruco][2] library and a vision system.
 
 The repository consists following parts:
 * *DR data generation*. Generates the synthetic and real data, and stores it as XML files. The 'dr_launch' package contains the launch files for the synthetic and real data generation. The URDF model is randomised following a normal distribution and saved in the 'dr_description' package.
