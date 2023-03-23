@@ -1,7 +1,7 @@
-A ROS-based Domain Randomization (DR) calibration approach for the ABB IRB14000 (YuMi)
+# A ROS-based Domain Randomization (DR) calibration approach for the ABB IRB14000 (YuMi)
 =========
 
-# OVERVIEW
+## Overview
 
 This repository contains the files and ROS wrappers of the initial approach to test the Domain Randomization (DR) concept for the calibration of a ABB IRB14000 (YuMi) robot.
 
@@ -15,9 +15,7 @@ The repository consists following parts:
 * DR training.
 * Robot description.
 
-# ROS API
-
-## Launch files
+## ROS API
 
 ### Synthetic data generation
 
@@ -41,7 +39,7 @@ Training of the model.
 
      roslaunch dr_dnn_training train_model.launch path_to_database_training_package:= /path_dataset retraining_file_name:=/filename_to_retrain training_name:=/output_filename
 
-# Ackownledgement
+## Ackownledgement
 
 This work has been developed in the context of the H2020-MSCA-ITN [DiManD project][3] funded by the European Union’s Horizon
 2020 research and innovation programme under grant agreement no.814078.
