@@ -1,5 +1,4 @@
 # A ROS-based Domain Randomization (DR) calibration approach for the ABB IRB14000 (YuMi)
-=========
 
 ## Overview
 
