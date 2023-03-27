@@ -85,7 +85,7 @@ Inputs the robot cartesian position and orientation obtained by the vision syste
 
 ## Disclaimer
 
-This repository contains packages under development to calibrate the robot kinematic model and control a robot arm. Any use of this repository in environments with a real robot must be performed under strict caution to avoid damages to the robot itself and the operators.
+This repository contains packages under development to calibrate the robot kinematic model and control a robot arm. Any use of this repository in environments with a real robot must be performed under strict caution to avoid damages to the robot itself and/or injuries to the operators.
 
 ## Ackownledgement
 
