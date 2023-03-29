@@ -10,7 +10,7 @@
     <arg name="gripper_hw_interface" default="EffortJointInterface"/>
 
     <!-- The robot description (URDF file) -->
-    <param name="robot_description" command="xacro $(find yumi_description)/urdf/yumi_main.xacro 
+    <param name="/robot_description" command="xacro $(find yumi_description)/urdf/yumi_main.xacro 
             gazebo:=$(arg gazebo) 
             table:=$(arg table)
             camera:=$(arg camera)

@@ -59,6 +59,9 @@ namespace dr {
 
     }
 
+    /**************************************************************************
+     * generate method (pretraining phase)
+     **************************************************************************/
     bool XMLGenerator::generate(std::string filename, std::vector<double> pos_joints, std::vector<double> ideal_pose_3d, std::vector<double> random_pose_3d)
     {
 
@@ -182,6 +185,9 @@ namespace dr {
         return true;
     }
 
+    /**************************************************************************
+     * generate method (training phase)
+     **************************************************************************/
     bool XMLGenerator::generate(std::string filename, std::vector<double> pos_joints, std::vector<double> pose_3d)
     {
 
@@ -275,6 +281,5 @@ namespace dr {
         ROS_WARN("Process finished");
         return true;
     }
-
 
 }; // end dr namespace

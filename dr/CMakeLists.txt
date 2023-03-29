@@ -127,7 +127,8 @@ include_directories(
 # add_library(${PROJECT_NAME}
 #   src/${PROJECT_NAME}/dr.cpp
 # )
-add_library(dr src/XMLGenerator.cpp
+add_library(dr src/target_manipulator.cpp
+               src/XMLGenerator.cpp
                src/tinyxml2.cpp
                src/pretraining_task.cpp
                src/training_task.cpp

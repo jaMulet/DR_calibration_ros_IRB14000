@@ -7,13 +7,13 @@
     <arg name="hw_interface" default="PositionJointInterface"/>
     <!-- *************************************************** -->
     <!-- DR parameters -->
-    <arg name="joint_1R" default="-0.00028663860945365272"/>
-    <arg name="joint_2R" default="0.006999632932935612"/>
-    <arg name="joint_7R" default="-0.0031460982684862245"/>
-    <arg name="joint_3R" default="-0.0013999915743025957"/>
-    <arg name="joint_4R" default="-0.0042775032520205288"/>
-    <arg name="joint_5R" default="-0.00092790334648443229"/>
-    <arg name="joint_6R" default="-0.00073112796077402342"/>
+    <arg name="joint_1R" default="0.0017386896766999997"/>
+    <arg name="joint_2R" default="0.00041858538002967479"/>
+    <arg name="joint_7R" default="-0.0016976065476521263"/>
+    <arg name="joint_3R" default="-0.0025922501902602745"/>
+    <arg name="joint_4R" default="0.002034425223737034"/>
+    <arg name="joint_5R" default="0.0021291067466728086"/>
+    <arg name="joint_6R" default="-0.003296183333733195"/>
     <param name="robot_randomised_description" command="xacro $(find dr_description)/urdf/yumi_main.xacro 
             gazebo:=$(arg gazebo) 
             table:=$(arg table)
@@ -30,7 +30,7 @@
     <!-- The semantic description that corresponds to the URDF (randomised)-->
     <param name="robot_randomised_description_semantic" textfile="$(find yumi_moveit_config)/config/yumi.srdf"/>
     <!-- The kinematic description that corresponds to the URDF -->
-    <group ns="robot_randomised_description_kinematics">
+    <!--<group ns="robot_randomised_description_kinematics">
         <rosparam command="load" file="$(find yumi_moveit_config)/config/kinematics.yaml"/>
-    </group>
+    </group>-->
 </launch>

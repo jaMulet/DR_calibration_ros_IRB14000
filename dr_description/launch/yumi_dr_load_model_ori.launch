@@ -32,6 +32,6 @@
    DR_joint_6R:=$(arg joint_6R)"/>
 
   <!-- The semantic description that corresponds to the URDF (randomised)-->
-  <param name="robot_randomised_description_semantic" textfile="$(find yumi_description)/config/yumi.srdf" />
+  <param name="robot_randomised_description_semantic" textfile="$(find yumi_moveit_config)/config/yumi.srdf" />
 	
 </launch>

@@ -1,13 +1,11 @@
 <?xml version="1.0"?>
 <launch>
 
-  <arg name="robot_nickname" default="yumi"/>
   <arg name="control_type" default="position"/>
 
   <!-- Remap to match up with hardware interface's topics -->
   <remap from="/joint_states" to="/egm/joint_states"/>
 
-  <!--<group ns="$(arg robot_nickname)">-->
   <!-- ============================================================================================================= -->
   <!-- ============================================================================================================= -->
   <!-- 'ros_control' components in the "egm" namespace (to match the hardware interface) -->
@@ -37,8 +35,7 @@
   <!-- *************************************************** -->
   <!-- Given the published joint states, publish tf for the robot links -->
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="true"/>
-  
-  <!--</group>-->
+        <!--<remap from="robot_description" to="yumi/robot_description" />-->
 
   <!-- *************************************************** -->
   <!-- Main MoveIt! executable with trajectory execution   -->

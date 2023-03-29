@@ -5,8 +5,7 @@
   <xacro:arg name="table" default="false"/>
   <xacro:arg name="camera" default="false"/>
 
-  <xacro:arg name="arms_hw_interface" default="VelocityJointInterface"/>
-
+  <xacro:arg name="arms_hw_interface" default="PositionJointInterface"/>
   <xacro:arg name="smart_gripper" default="false"/>
   <xacro:arg name="grippers_hw_interface" default="EffortJointInterface"/>
 
@@ -23,9 +22,9 @@
   <!--Import the yumi macro                         -->
   <xacro:include filename="$(find yumi_description)/urdf/yumi.xacro"/>
   
-  <link name="world"/>
-  <joint name="world_joint" type="fixed">
-    <parent link="world"/>
+  <link name="${yumi_parent}"/>
+  <joint name="${yumi_parent}_joint" type="fixed">
+    <parent link="${yumi_parent}"/>
     <child link="yumi_base_link"/>
     <origin xyz="0 0 0.1" rpy="0 0 0" />
   </joint>
@@ -56,11 +55,5 @@
   <xacro:if value="$(arg gazebo)">
     <xacro:include filename="$(find yumi_description)/urdf/gazebo/gazebo.urdf.xacro"/>
   </xacro:if>
-
-
-
-
-
-
 
 </robot>

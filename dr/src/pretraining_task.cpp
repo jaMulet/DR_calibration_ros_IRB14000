@@ -46,7 +46,7 @@ namespace dr {
     
         DRPretrainingTask::PretrainingTaskResult task_result;
         task_result.joint_values.clear();
-        task_result.joint_values.resize(7);
+        task_result.joint_values.resize(n_dof);
 
         //-----------------------
         // Robot model loader
@@ -60,7 +60,7 @@ namespace dr {
         if (ideal_kinematic_model->isEmpty()) {
             ROS_INFO("Error creating robot model (ideal)");
             
-            for (int i = 0; i < 7; i++){
+            for (int i = 0; i < n_dof; i++){
                 task_result.joint_values.at(i) = -1;
             }
             return task_result;
@@ -75,7 +75,7 @@ namespace dr {
         if (randomised_kinematic_model->isEmpty()){
             ROS_INFO("Error creating robot model (randomised)");
 
-            for (int i = 0; i < 7; i++){
+            for (int i = 0; i < n_dof; i++){
                 task_result.joint_values.at(i) = -1;
             }
             return task_result;
@@ -161,13 +161,13 @@ namespace dr {
         move_result = move_group.execute(my_plan);
 
         // Move error handling:
-        if (move_result != moveit::planning_interface::MoveItErrorCode::SUCCESS){
+        /*if (move_result != moveit::planning_interface::MoveItErrorCode::SUCCESS){
                 
-            for (int i = 0; i < 7; i++){
+            for (int i = 0; i < n_dof; i++){
                 task_result.joint_values.at(i) = -1;
             }
             return task_result;
-        }
+        }*/
 
         move_success = (move_result == moveit::planning_interface::MoveItErrorCode::SUCCESS);
         
@@ -208,7 +208,7 @@ namespace dr {
         // Return results
         //-----------------------
         
-        for (int i = 0; i < 7; i++){
+        for (int i = 0; i < n_dof; i++){
             task_result.joint_values.at(i) = ideal_joint_values.at(i);
         }
         task_result.ideal_pose = ideal_pose;

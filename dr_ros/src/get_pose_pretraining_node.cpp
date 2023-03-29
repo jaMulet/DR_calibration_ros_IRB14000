@@ -24,7 +24,8 @@
             ros::Subscriber pose_subscriber;
             ros::Subscriber index_subscriber;
 
-            int maxobjs = 1;
+            // Robot DOFs
+            int n_dof;
             
             // Declarations poses variables
             std::vector<double> pos_joints;
@@ -44,11 +45,14 @@
         /**************************************************************************
          * Constructor
         **************************************************************************/
-        GetPosePretraining(ros::NodeHandle *nh, std::string path_to_dataset_gen) {
+        GetPosePretraining(ros::NodeHandle *nh, std::string path_to_dataset_gen, int robot_n_dof) {
             pose_subscriber = nh->subscribe("/result_dr_task", 1000, &GetPosePretraining::callback_pose, this);
             index_subscriber = nh->subscribe("/iteration", 1000, &GetPosePretraining::callback_index, this);
 
             //ROS_INFO("Result's subscribers alive");
+
+            n_dof = robot_n_dof;
+
 
             // Current time for filename
             auto t = std::time(nullptr);
@@ -90,13 +94,10 @@
             // Obtain poses from message
             if (msg.result)
             {
-                pos_joints.at(0) = msg.joints_pos[0];
-                pos_joints.at(1) = msg.joints_pos[1];
-                pos_joints.at(2) = msg.joints_pos[2];
-                pos_joints.at(3) = msg.joints_pos[3];
-                pos_joints.at(4) = msg.joints_pos[4];
-                pos_joints.at(5) = msg.joints_pos[5];
-                pos_joints.at(6) = msg.joints_pos[6];
+                for ( int i = 0; i < n_dof; i++)
+                {
+                    pos_joints.at(i) = msg.joints_pos[i];
+                }
                 
                 ideal_3dpose.at(0) = msg.ideal_pose.position.x;
                 ideal_3dpose.at(1) = msg.ideal_pose.position.y;
@@ -118,13 +119,10 @@
             }
             else
             {
-                pos_joints.at(0) = -1;
-                pos_joints.at(1) = -1;
-                pos_joints.at(2) = -1;
-                pos_joints.at(3) = -1;
-                pos_joints.at(4) = -1;
-                pos_joints.at(5) = -1;
-                pos_joints.at(6) = -1;
+                for ( int i = 0; i < n_dof; i++)
+                {
+                    pos_joints.at(i) = -1;
+                }
                 
                 ideal_3dpose.at(0) = -1;
                 ideal_3dpose.at(1) = -1;
@@ -159,13 +157,20 @@ int main (int argc, char **argv)
     ros::NodeHandle nh;
     
     std::string path_to_dataset_gen;
+    int n_dof;
     
-    if (argc > 1)
+    if (argc != 3)
+    {
+        ROS_ERROR("Error calling node. Usage: get_pose 'random_URDF_file' 'robot_num_dof'");
+        return 1;
+    }
+    else
     {
         path_to_dataset_gen = argv[1];
+        n_dof = std::stoi(argv[2]);
     }
 
-    GetPosePretraining nc = GetPosePretraining(&nh, path_to_dataset_gen);
+    GetPosePretraining nc = GetPosePretraining(&nh, path_to_dataset_gen, n_dof);
     
     ros::spin();
 }

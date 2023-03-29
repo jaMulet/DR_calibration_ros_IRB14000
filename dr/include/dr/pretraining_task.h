@@ -30,6 +30,7 @@ class DRPretrainingTask{
         
         std::string ideal_robot_model;
         std::string random_robot_model;
+        int n_dof;
         std::string current_ee_name;
 
         /**

@@ -128,7 +128,7 @@ namespace dr {
         moveit::planning_interface::MoveItErrorCode move_result = move_group.execute(my_plan);
 
         //-----------------------
-        ROS_WARN("Sleeping for 5 sec to perform the cartesian move...");
+        ROS_WARN("Sleeping for %f sec to perform the cartesian move...", t_long_sleep);
         ros::Duration(t_long_sleep).sleep(); // sleep for 1s. Time required to get current state. CHECK IF THIS DELAY IS NEEDED!
         //-----------------------
 
@@ -193,7 +193,7 @@ namespace dr {
         moveit::planning_interface::MoveItErrorCode move_result = move_group.execute(my_plan);
         
         //-----------------------
-        ROS_WARN("Sleeping for 5 sec to perform the joint move...");
+        ROS_WARN("Sleeping for %f sec to perform the cartesian move...", t_long_sleep);
         ros::Duration(t_long_sleep).sleep(); // sleep for 1s. Time required to get current state. CHECK IF THIS DELAY IS NEEDED!
         //-----------------------
 

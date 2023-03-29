@@ -6,7 +6,7 @@
   <xacro:arg name="table" default="false"/>
   <xacro:arg name="camera" default="false"/>
 
-  <xacro:arg name="arms_hw_interface" default="VelocityJointInterface"/>
+  <xacro:arg name="arms_hw_interface" default="PositionJointInterface"/>
   <xacro:arg name="grippers_hw_interface" default="EffortJointInterface"/>
 
   <!-- ******************************************** -->

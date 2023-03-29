@@ -31,7 +31,7 @@ class DataSetGen:
         self._index = UInt32()
         self.index_publisher = rospy.Publisher("/iteration", UInt32, queue_size=1)
 
-        self.urdf_random_call = rospy.ServiceProxy("/random_model", SetBool)
+        self.urdf_random_call = rospy.ServiceProxy("/randomiser", SetBool)
         self.urdf_random_request = SetBoolRequest()
         self.urdf_random_result = False
 
@@ -61,7 +61,7 @@ class DataSetGen:
             # 1. Randomise model
             #--------------------------------------------------
             rospy.loginfo("Waiting randomising model service")
-            rospy.wait_for_service("random_model")
+            rospy.wait_for_service("randomiser")
 
             rospy.loginfo("Randomising model")
             self.urdf_random_request = True

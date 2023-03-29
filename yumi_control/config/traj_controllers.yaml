@@ -27,7 +27,6 @@ joint_position_trajectory_controller:
     - yumi_robr_joint_5
     - yumi_robr_joint_6
 
-#/yumi/egm/joint_position_trajectory_controller_l:
 joint_position_trajectory_controller_l:
   type: position_controllers/JointTrajectoryController
   joints:
@@ -47,7 +46,6 @@ joint_position_trajectory_controller_l:
     yumi_robl_joint_5: {p: 1.5,  d: 0, i: 0.002, i_clamp: 0.1}
     yumi_robl_joint_6: {p: 1.5,  d: 0, i: 0.002, i_clamp: 0.1}
 
-#/yumi/egm/joint_position_trajectory_controller_r:
 joint_position_trajectory_controller_r:
   type: position_controllers/JointTrajectoryController
   joints:

@@ -4,7 +4,10 @@
   <arg name="robot_nickname" default="yumi" doc="The robot name. Ensure this is the same name you give to the arm in the urdf instance."/>
   <arg name="robot_ip" default="192.168.1.108"/>
   <arg name="control_type" default="position"/>
+  <arg name="task_target_pose" default="[0.20445;-0.32462;0.35699;-0.08378;0.76356;0.092061;0.63363]" doc="Cartesian (x, y, z) and quaternions (q1, q2, q3, q4) separated by '; '"/>
   <arg name="robot_model" default="/robot_description"/>
+  <arg name="planning_group" default="rob_r"/>
+  <arg name="robot_num_dofs" default="7"/>
   <arg name="endeffector" default="yumi_tool0_R"/>
 
   <!-- ************************************************************* -->
@@ -19,6 +22,6 @@
 
   <!-- ************************************************************* -->
   <node name="dr_training_task" pkg="dr_ros" type="dr_training_task" output="screen"
-        args="$(arg robot_model) $(arg endeffector)"/>
+        args="$(arg task_target_pose) $(arg robot_model) $(arg planning_group) $(arg robot_num_dofs) $(arg endeffector)"/>
 
 </launch>

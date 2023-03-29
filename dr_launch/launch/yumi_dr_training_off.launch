@@ -3,6 +3,10 @@
 
   <arg name="number_of_elements" default="500"/>
   <arg name="path_to_dataset_gen" default="/home/jama/catkin_yumi_ws/src/"/>
+  <arg name="robot_num_dof" default="7"/>
+  <arg name="controller_name" default="joint_position_trajectory_controller_r"/>
+  <arg name="robot_task_name" default="T_ROB_R"/>
+
   <arg name="vision_sys_topic" default="/aruco_3dgrid/transform_grid"/>
 
   <!-- Robot namespace -->
@@ -30,11 +34,12 @@
     <!-- Gather EE position                              -->
     <remap from="/vision_pose" to="$(arg vision_sys_topic)"/>
     <node name="get_pose" pkg="dr_ros" type="get_pose_training" output="screen"
-          args="$(arg path_to_dataset_gen)"/>
+          args="$(arg path_to_dataset_gen) $(arg robot_num_dof)"/>
 
     <!-- *********************************************** -->
     <!-- EGM contol                                      -->
-    <node name="egm_control" pkg="dr_ros" type="egm_control" output="screen"/>
+    <node name="egm_control" pkg="dr_ros" type="egm_control" output="screen"
+          args="$(arg controller_name) $(arg robot_task_name)"/>
 
     <!-- *********************************************** -->
     <!-- Remap services according to DR task namespace   -->

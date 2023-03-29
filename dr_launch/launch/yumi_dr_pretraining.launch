@@ -3,10 +3,11 @@
 
   <arg name="number_of_elements" default="500"/>
   <arg name="path_to_dataset_gen" default="/home/jama/catkin_yumi_ws/src/"/>
+  <arg name="urdf_filename_to_randomise" default="yumi_dr_load_model.launch"/>
+  <arg name="robot_num_dof" default="7"/>
+  <arg name="model_name" default="yumi" doc="The robot name. Ensure this is the same name you give to the arm in the urdf instance."/>
+  <arg name="range_randomization" default="0.01"/><!-- In percentage (e.g., 0.01 = 1%) -->
   
-  <!-- Robot namespace -->
-  <arg name="robot_nickname" default="yumi" doc="The robot name. Ensure this is the same name you give to the arm in the urdf instance."/>
-
   <!-- ============================================================================================================= -->
   <!-- startup simulated world -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
@@ -27,7 +28,7 @@
 
   <!-- ============================================================================================================= -->
   <!-- ============================================================================================================= -->
-  <!--<group ns="$(arg robot_nickname)">-->
+  <!--<group ns="$(arg model_name)">-->
 
     <!-- *********************************************** -->
     <!-- DR orchestration: creation of synthetic dataset -->
@@ -36,12 +37,13 @@
 
     <!-- *********************************************** -->
     <!-- Creation of the randomised model                -->
-    <node name="randomiser" pkg="dr_ros" type="randomiser_URDF" output="screen"/>
+    <node name="randomiser" pkg="dr_ros" type="randomiser_URDF" output="screen"
+          args="$(arg urdf_filename_to_randomise) $(arg robot_num_dof) $(arg range_randomization)"/>
 
     <!-- *********************************************** -->
     <!-- Gather EE position                              -->
     <node name="get_pose" pkg="dr_ros" type="get_pose_pretraining" output="screen"
-          args="$(arg path_to_dataset_gen)"/>
+          args="$(arg path_to_dataset_gen) $(arg robot_num_dof)"/>
 
     <!-- *********************************************** -->
     <!-- Remap services according to namespaces          -->
@@ -51,7 +53,8 @@
         
     <!-- *********************************************** -->
     <!-- Gazebo simulation control (reset, clear, etc)   -->
-    <node name="sim_control" pkg="dr_ros" type="sim_control" output="screen"/>
+    <node name="sim_control" pkg="dr_ros" type="sim_control" output="screen"
+          args="$(arg model_name)"/>
 
   <!--</group>-->
   <!-- ============================================================================================================= -->

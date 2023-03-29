@@ -52,19 +52,23 @@ class GetPoseTraining {
         std::string str_date;
         std::string str_index = "0";
 
+        int n_dof;
+
         dr::XMLGenerator xml_generator;
 
     public:
     /**************************************************************************
      * Constructor
      **************************************************************************/
-    GetPoseTraining(ros::NodeHandle *nh, std::string path_to_dataset_gen) {
+    GetPoseTraining(ros::NodeHandle *nh, std::string path_to_dataset_gen, int robot_n_dof) {
         aruco_pose_subscriber = nh->subscribe("/vision_pose", 1000, &GetPoseTraining::callback_aruco_pose, this);
         robot_pose_subscriber = nh->subscribe("/result_dr_task", 1000, &GetPoseTraining::callback_robot_pose, this);
         index_subscriber = nh->subscribe("/iteration", 1000, &GetPoseTraining::callback_index, this);
         get_pose_service = nh->advertiseService("/get_pose", &GetPoseTraining::callback_pose, this);
 
         //ROS_INFO("Result's subscribers alive");
+
+        n_dof = robot_n_dof;
 
         // Current time
         auto t = std::time(nullptr);
@@ -101,25 +105,19 @@ class GetPoseTraining {
         // Obtain poses from message
         if (msg.result)
         {
-            pos_joints.at(0) = msg.joints_pos[0];
-            pos_joints.at(1) = msg.joints_pos[1];
-            pos_joints.at(2) = msg.joints_pos[2];
-            pos_joints.at(3) = msg.joints_pos[3];
-            pos_joints.at(4) = msg.joints_pos[4];
-            pos_joints.at(5) = msg.joints_pos[5];
-            pos_joints.at(6) = msg.joints_pos[6];
+            for ( int i = 0; i < n_dof; i++)
+            {
+                pos_joints.at(i) = msg.joints_pos[i];
+            }
             
             ROS_INFO("Robot poses saved");
         }
         else
         {
-            pos_joints.at(0) = -1;
-            pos_joints.at(1) = -1;
-            pos_joints.at(2) = -1;
-            pos_joints.at(3) = -1;
-            pos_joints.at(4) = -1;
-            pos_joints.at(5) = -1;
-            pos_joints.at(6) = -1;
+            for ( int i = 0; i < n_dof; i++)
+            {
+                pos_joints.at(i) = -1;
+            }
             
             ROS_WARN("Robot poses saved with robot poses error");
         }
@@ -192,7 +190,6 @@ class GetPoseTraining {
             filename.append(".xml");
         
             // Write poses in XML file and saves it
-            // MODIFY TO ADMIT CHANGES IN XML FILEPATH
             bool success = xml_generator.generate(filename, pos_joints, pose_3d);
             if (success)
             {
@@ -221,13 +218,20 @@ int main (int argc, char **argv)
     ros::NodeHandle nh;
 
     std::string path_to_dataset_gen;
+    int robot_n_dof;
     
-    if (argc > 1)
+    if (argc != 3)
+    {
+        ROS_ERROR("Error calling node. Usage: get_pose 'path_to_dataset_gen' 'robot_num_dof'");
+
+    }
+    else
     {
         path_to_dataset_gen = argv[1];
+        robot_n_dof = std::stoi(argv[2]);
     }
 
-    GetPoseTraining nc = GetPoseTraining(&nh, path_to_dataset_gen);
+    GetPoseTraining nc = GetPoseTraining(&nh, path_to_dataset_gen, robot_n_dof);
     
     ros::spin();
 }

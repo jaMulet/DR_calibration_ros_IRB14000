@@ -10,62 +10,80 @@
 #include <dr_msgs/PretrainingPoses.h>
 #include <eigen_conversions/eigen_msg.h>
 
+// String
+#include <string>
+#include <vector>
+
 // DR application
 #include <dr/pretraining_task.h>
+#include <dr/target_manipulator.h>
 
   /***********************************************************************************************************************
    * Class definitions: YumiDRTask
    **********************************************************************************************************************/
-  class YumiDRTask {
+  class DRTask {
     private:
       ros::Publisher drtask_pub;
       ros::ServiceServer drtask_srv;
       dr_msgs::PretrainingPoses poses;
 
+      std::string planning_group;
+
+      int n_dof;
+
+      geometry_msgs::Pose target_pose;
+
       dr::DRPretrainingTask dr_task;
       dr::DRPretrainingTask::PretrainingTaskResult dr_task_result;
-
-      std::string planning_group;
+      dr::TargetManipulator target_task;
 
     public:
 
       /**************************************************************************
        * Constructor
        **************************************************************************/
-      YumiDRTask (ros::NodeHandle *nh, std::string ideal_robot_model, std::string random_robot_model, std::string ee_name) {
+      DRTask (ros::NodeHandle *nh, std::string task_target_pose, std::string ideal_robot_model, std::string random_robot_model, std::string planning_group_name, int robot_n_dof, std::string ee_name) {
 
         drtask_pub = nh->advertise<dr_msgs::PretrainingPoses>("/result_dr_task", 10);
-        drtask_srv = nh->advertiseService("/dr_task", &YumiDRTask::callback_drtask, this);
+        drtask_srv = nh->advertiseService("/dr_task", &DRTask::callback_drtask, this);
 
-        dr_task_result.joint_values.clear();dr_task_result.joint_values.resize(7);
-        poses.joints_pos.clear();poses.joints_pos.resize(7);
-
-        //-----------------------
         // Robot configuration
-        //-----------------------
         dr_task.ideal_robot_model = ideal_robot_model;// Ideal robot description (used in ros_control)
         dr_task.random_robot_model = random_robot_model;// Randomised robot description (used in the sim)
         dr_task.current_ee_name = ee_name;// Link to which apply the calibration (e.g. last link, tool, etc)
 
-        planning_group = "rob_r";
+        planning_group = planning_group_name;
+
+        // Robot number of DOFs
+        n_dof = robot_n_dof;
+        dr_task.n_dof = robot_n_dof;
+
+        // Target pose
+        ROS_INFO("Target pose: %s", task_target_pose.c_str());
+
+        task_target_pose = target_task.removeBrackets(task_target_pose);
+
+        std::vector<std::string> tokens;
+        tokens = target_task.split(task_target_pose, ';');
+
+        //ROS_ERROR("Target pose (final): x: %s y: %s z: %s qua_x: %s qua_y: %s qua_z: %s qua_w: %s", tokens.at(0).c_str(), tokens.at(1).c_str(), tokens.at(2).c_str(), tokens.at(3).c_str(), tokens.at(4).c_str(), tokens.at(5).c_str(), tokens.at(6).c_str());
+        target_pose.position.x = std::stod(tokens.at(0));
+        target_pose.position.y = std::stod(tokens.at(1));
+        target_pose.position.z = std::stod(tokens.at(2));
+        target_pose.orientation.x = std::stod(tokens.at(3));
+        target_pose.orientation.y = std::stod(tokens.at(4));
+        target_pose.orientation.z = std::stod(tokens.at(5));
+        target_pose.orientation.w = std::stod(tokens.at(6));
+
+        // Results
+        dr_task_result.joint_values.clear();dr_task_result.joint_values.resize(n_dof);
+        poses.joints_pos.clear();poses.joints_pos.resize(n_dof);
       }
 
       /**************************************************************************
        * DRTask callback
        **************************************************************************/
       bool callback_drtask(std_srvs::SetBool::Request &req, std_srvs::SetBool::Response &res){
-
-        //-----------------------
-        // Target pose (end-effector in robot frame)
-        //-----------------------
-        geometry_msgs::Pose target_pose;
-        target_pose.position.x = 0.20445;
-        target_pose.position.y = -0.32462;
-        target_pose.position.z = 0.35699;
-        target_pose.orientation.x = -0.08378;
-        target_pose.orientation.y = 0.76356;
-        target_pose.orientation.z = 0.092061;
-        target_pose.orientation.w = 0.63363;
 
         //-----------------------
         // DR task execution
@@ -84,7 +102,8 @@
           poses.result = true;
         }
 
-        for (int i = 0; i < 7; i++){
+        for (int i = 0; i < n_dof; i++)
+        {
           poses.joints_pos.at(i) = dr_task_result.joint_values.at(i);
         }
         poses.ideal_pose = dr_task_result.ideal_pose;
@@ -106,22 +125,29 @@ int main (int argc, char **argv)
   
   ros::NodeHandle nh;
 
+  std::string target_pose;
   std::string ideal_robot_model;
   std::string random_robot_model;
+  std::string planning_group;
+  int robot_n_dof;
   std::string ee_name;
 
-  if (argc < 4)
+  if (argc != 7)
   {
-      ROS_ERROR("Error calling node. Usage: dr_pretraining_task 'ideal_robot_model' 'random_robot_model' 'endeffector_name'");
+      ROS_ERROR("Error calling node. Usage: dr_pretraining_task 'target_pose (cartesians and quaternions separated by semocolon)' 'ideal_robot_model' 'random_robot_model' 'planning_group' 'robot_n_dof' 'endeffector_name'");
+      return 1;
   }
   else
   {
-    ideal_robot_model = argv[1];
-    random_robot_model = argv[2];
-    ee_name = argv[3];
+    target_pose = argv[1];
+    ideal_robot_model = argv[2];
+    random_robot_model = argv[3];
+    planning_group = argv[4];
+    robot_n_dof = std::stoi(argv[5]);
+    ee_name = argv[6];
   }
 
-  YumiDRTask yumi_dr_task = YumiDRTask(&nh, ideal_robot_model, random_robot_model, ee_name);
+  DRTask yumi_dr_task = DRTask(&nh, target_pose, ideal_robot_model, random_robot_model, planning_group, robot_n_dof, ee_name);
 
   ros::MultiThreadedSpinner s(16);
 
